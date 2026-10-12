@@ -1,0 +1,29 @@
+[package]
+name = "sentinel-core"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+description = "Append-only transparency log: persistent log, RFC 6962 Merkle tree, inclusion and consistency proofs"
+license = "MIT"
+
+# No [dependencies] section. See the note in src/lib.rs — the hash function,
+# the tree, the proofs and the storage framing are the project, so importing
+# them would leave nothing behind. The only consequence is SHA-256 throughput,
+# which bench/ measures rather than hand-waves.
+
+[lib]
+name = "sentinel_core"
+# staticlib for the cgo bridge in go/logstore; rlib so the integration tests
+# and the bench binary can link it as a normal Rust crate.
+crate-type = ["staticlib", "rlib"]
+
+[profile.release]
+opt-level = 3
+# The log's integrity rests on assertions in the tree and the framing. Keeping
+# debug assertions out of release is standard, but overflow checks stay on:
+# a wrapped position or size would silently produce a valid-looking proof for
+# the wrong entry, which is exactly the failure this project is about.
+overflow-checks = true
+
+[profile.bench]
+inherits = "release"

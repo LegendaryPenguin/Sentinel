@@ -1,0 +1,15 @@
+# Rust
+/sentinel-core/target/
+**/*.rs.bk
+
+# Go
+/go/sentinel-verify
+/go/sentinel-server
+/go/cmd/sentinel-server/sentinel-server
+/go/cmd/sentinel-verify/sentinel-verify
+
+# Logs produced by running the thing
+*.log
+
+# macOS
+.DS_Store
