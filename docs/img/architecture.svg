@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" width="960" height="620" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b9bb4"/>
+    </marker>
+    <marker id="arrowAccent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5eb0ef"/>
+    </marker>
+    <marker id="arrowWarn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d8a657"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="620" fill="#14161b"/>
+
+  <text x="32" y="44" fill="#e6e9ef" font-size="21" font-weight="600">Sentinel</text>
+  <text x="32" y="68" fill="#8b9bb4" font-size="13">append-only transparency log — the auditor shares no code with the log</text>
+
+  <!-- ===================== server side ===================== -->
+  <rect x="32" y="96" width="470" height="430" rx="8" fill="#171a21" stroke="#39404f"/>
+  <text x="50" y="122" fill="#5eb0ef" font-size="13" font-weight="600">log server</text>
+  <text x="430" y="122" fill="#6f7d94" font-size="11">trusted</text>
+
+  <rect x="50" y="138" width="434" height="62" rx="6" fill="#1e232c" stroke="#2f3643"/>
+  <text x="64" y="160" fill="#e6e9ef" font-size="12">go/service  —  HTTP</text>
+  <text x="64" y="179" fill="#6f7d94" font-size="10.5">POST /append  ·  GET /root  ·  /entry  ·  /proof/inclusion  ·  /proof/consistency</text>
+  <text x="64" y="194" fill="#6f7d94" font-size="10.5">proofs always against an explicit tree size, never "current"</text>
+
+  <path d="M 267 200 L 267 226" stroke="#8b9bb4" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="50" y="226" width="434" height="52" rx="6" fill="#1e232c" stroke="#2f3643"/>
+  <text x="64" y="248" fill="#e6e9ef" font-size="12">go/logstore  —  cgo bridge</text>
+  <text x="64" y="266" fill="#6f7d94" font-size="10.5">RWMutex mirrors Rust's borrow rules across the C ABI</text>
+
+  <path d="M 267 278 L 267 304" stroke="#8b9bb4" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="50" y="304" width="434" height="206" rx="6" fill="#1b1f27" stroke="#2f3643"/>
+  <text x="64" y="326" fill="#e6e9ef" font-size="12">sentinel-core  —  Rust, zero dependencies</text>
+
+  <rect x="64" y="338" width="200" height="54" rx="5" fill="#232936" stroke="#2f3643"/>
+  <text x="76" y="357" fill="#cdd6e3" font-size="11">tree.rs</text>
+  <text x="76" y="374" fill="#6f7d94" font-size="10">RFC 6962, left-complete</text>
+  <text x="76" y="387" fill="#6f7d94" font-size="10">perfect-subtree cache</text>
+
+  <rect x="276" y="338" width="196" height="54" rx="5" fill="#232936" stroke="#2f3643"/>
+  <text x="288" y="357" fill="#cdd6e3" font-size="11">proof.rs</text>
+  <text x="288" y="374" fill="#6f7d94" font-size="10">inclusion · consistency</text>
+  <text x="288" y="387" fill="#6f7d94" font-size="10">recursive gen, iterative check</text>
+
+  <rect x="64" y="400" width="200" height="54" rx="5" fill="#232936" stroke="#2f3643"/>
+  <text x="76" y="419" fill="#cdd6e3" font-size="11">log.rs  — source of truth</text>
+  <text x="76" y="436" fill="#6f7d94" font-size="10">append-only, CRC per record</text>
+  <text x="76" y="449" fill="#6f7d94" font-size="10">tree rebuilt on every open</text>
+
+  <rect x="276" y="400" width="196" height="54" rx="5" fill="#232936" stroke="#2f3643"/>
+  <text x="288" y="419" fill="#cdd6e3" font-size="11">sha256.rs</text>
+  <text x="288" y="436" fill="#6f7d94" font-size="10">hand-rolled FIPS 180-4</text>
+  <text x="288" y="449" fill="#6f7d94" font-size="10">no crates at all</text>
+
+  <rect x="64" y="462" width="408" height="36" rx="5" fill="#1e232c" stroke="#5a4a2a"/>
+  <text x="76" y="485" fill="#d8a657" font-size="10.5">torn tail → truncate and report   ·   bad CRC → refuse to start</text>
+
+  <!-- ===================== auditor side ===================== -->
+  <rect x="534" y="96" width="394" height="430" rx="8" fill="#171a21" stroke="#39404f"/>
+  <text x="552" y="122" fill="#5eb0ef" font-size="13" font-weight="600">independent auditor</text>
+  <text x="852" y="122" fill="#d8a657" font-size="11">untrusting</text>
+
+  <rect x="552" y="138" width="358" height="62" rx="6" fill="#1e232c" stroke="#2f3643"/>
+  <text x="566" y="160" fill="#e6e9ef" font-size="12">go/audit  —  HTTP client</text>
+  <text x="566" y="179" fill="#6f7d94" font-size="10.5">returns nothing it has not verified</text>
+  <text x="566" y="194" fill="#6f7d94" font-size="10.5">4 checks run before the cryptography</text>
+
+  <path d="M 731 200 L 731 226" stroke="#5eb0ef" stroke-width="1.6" fill="none" marker-end="url(#arrowAccent)"/>
+
+  <rect x="552" y="226" width="358" height="112" rx="6" fill="#1b1f27" stroke="#3a6ea5"/>
+  <text x="566" y="248" fill="#e6e9ef" font-size="12">go/verify  —  stdlib only</text>
+  <text x="566" y="267" fill="#6f7d94" font-size="10.5">crypto/sha256, not the hand-rolled one</text>
+  <text x="566" y="283" fill="#6f7d94" font-size="10.5">canonical decoder rewritten from docs/FORMAT.md</text>
+  <text x="566" y="299" fill="#6f7d94" font-size="10.5">iterative verifiers — take no tree, only the proof</text>
+  <text x="566" y="321" fill="#5eb0ef" font-size="10.5">imports nothing above. enforced by a test.</text>
+
+  <rect x="552" y="350" width="358" height="76" rx="6" fill="#1e232c" stroke="#2f3643"/>
+  <text x="566" y="372" fill="#e6e9ef" font-size="12">cmd/sentinel-verify</text>
+  <text x="566" y="391" fill="#6f7d94" font-size="10.5">builds with CGO_ENABLED=0 — links no Rust</text>
+  <text x="566" y="407" fill="#6f7d94" font-size="10.5">root · audit · monitor · entry</text>
+  <text x="566" y="421" fill="#6f7d94" font-size="10.5">exit 3 means verification failed, not a network error</text>
+
+  <rect x="552" y="438" width="358" height="60" rx="6" fill="#1e232c" stroke="#5a4a2a"/>
+  <text x="566" y="459" fill="#d8a657" font-size="11">monitor: one proof, any growth</text>
+  <text x="566" y="477" fill="#6f7d94" font-size="10">the only check that detects a rewritten history —</text>
+  <text x="566" y="491" fill="#6f7d94" font-size="10">inclusion proofs all pass against a forged log</text>
+
+  <!-- cross-language arrow -->
+  <path d="M 502 300 L 534 300" stroke="#5eb0ef" stroke-width="1.6" fill="none" marker-end="url(#arrowAccent)"/>
+  <text x="32" y="556" fill="#5eb0ef" font-size="11">two independent SHA-256 implementations agreeing on a root is evidence. one implementation agreeing with itself is not.</text>
+  <text x="32" y="578" fill="#6f7d94" font-size="11">append  ·  position and timestamp are assigned by the log and hashed into the leaf, so neither is revisable after the fact</text>
+  <text x="32" y="596" fill="#6f7d94" font-size="11">audit   ·  canonical bytes are handed over, so the auditor hashes exactly what the log hashed rather than rebuilding it</text>
+</svg>
